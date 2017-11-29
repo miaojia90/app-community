@@ -1,3 +1,8 @@
+import './jockey.js';
+import './jsBridge.js';
+import {
+    linkedmeKey
+} from './env.js';
 /**
  * 存储localStorage
  */
@@ -26,6 +31,114 @@ export const removeStore = name => {
 }
 
 /**
+ * 判断是否登录 如果未登录 进行登录
+ */
+export const callLoginJockey = (callback) => {
+    WebViewJavascriptBridge.ready(function(bridge) {
+        bridge.login(function(session) {
+            var uid = session.uid;
+            var sid = session.sid;
+            setStore("sessionSid", session.sid);
+            setStore("sessionUid", session.uid);
+            if (callback && typeof(callback) === "function") {
+                callback();
+            }
+        });
+    });
+}
+
+/**
+ * 检查用户的session是否存在
+ */
+export const checkUserSession = (callback) => {
+    WebViewJavascriptBridge.ready(function(bridge) {
+        bridge.getSession(function(session) {
+            var uid = session.uid;
+            var sid = session.sid;
+            setStore("sessionSid", session.sid);
+            setStore("sessionUid", session.uid);
+            //用户没有登录跳转到登录
+            if (!sid) {
+                callLoginJockey(callback);
+            } else {
+                //调用点赞的接口
+                if (callback && typeof(callback) === "function") {
+                    callback();
+                } else {
+                    return;
+                }
+            }
+        });
+    });
+}
+
+/**
+ * 检查用户的session是否存在
+ */
+export const getUserSession = (callback) => {
+    WebViewJavascriptBridge.ready(function(bridge) {
+        bridge.getSession(function(session) {
+            var uid = session.uid;
+            var sid = session.sid;
+            setStore("sessionSid", session.sid);
+            setStore("sessionUid", session.uid);
+            //调用点赞的接口
+            if (callback && typeof(callback) === "function") {
+                callback();
+            } else {
+                return;
+            }
+        });
+    });
+}
+
+/**
+ * 发布评论
+ */
+export const publishComment = (code, type, replyCommentId, placeholder, callback) => {
+    WebViewJavascriptBridge.ready(function(bridge) {
+        bridge.getSession(function(session) {
+            var uid = session.uid;
+            var sid = session.sid;
+            setStore("sessionSid", session.sid);
+            setStore("sessionUid", session.uid);
+            //用户没有登录跳转到登录
+            if (!sid) {
+                callLoginJockey(callback);
+            } else {
+                //调用点赞的接口
+                WebViewJavascriptBridge.ready(function(bridge) {
+                    bridge.publishComment(code, type, replyCommentId, placeholder, callback);
+                });
+            }
+        });
+    });
+}
+
+/**
+ *  站内分享
+ */
+export const innerAppShare = (viewTitle, shareTitle, content, url, imageUrl, shareID, alwayShow, afterClickBottonCallback) => {
+    WebViewJavascriptBridge.showRightShareButton(viewTitle, shareTitle, content, url, imageUrl, shareID, alwayShow, afterClickBottonCallback);
+}
+
+/**
+ *  关闭webview
+ */
+export const closeWebView = () => {
+    WebViewJavascriptBridge.closeWebView();
+}
+
+/*
+ *  页面跳转
+ */
+export const jumpToView = (viewId, closeWebView, viewProperty) => {
+    WebViewJavascriptBridge.ready(function(bridge) {
+        bridge.jumpToView(viewId, closeWebView, viewProperty);
+    });
+}
+
+/**
  * 获取style样式
  */
 export const getStyle = (element, attr, NumberMode = 'int') => {
@@ -42,6 +155,99 @@ export const getStyle = (element, attr, NumberMode = 'int') => {
     return NumberMode == 'float' ? parseFloat(target) : parseInt(target);
 }
 
+/**
+ *  检查是否存在在APP中
+ */
+export const isInnerApp = () => {
+    return /JFZFortune/i.test(navigator.userAgent);
+}
+
+/**
+ * 进入到相对应的详情页
+ */
+export const enterDetailPageEvent = (url, uid) => {
+    if (!!!uid) {
+        //直接跳转到详情页
+        window.location.href = decodeURI(url);
+    } else {
+        if (/JFZFortune/i.test(navigator.userAgent)) {
+            //站内
+            WebViewJavascriptBridge.ready(function(bridge) {
+                bridge.jumpToView('32', '0', {
+                    "uid": uid
+                });
+            });
+        } else {
+            //站外
+            window.location.href = decodeURI(url);
+        }
+    }
+}
+
+/**
+ *  linkedme 跳转
+ */
+export const linkedmeFun = (callback) => {
+    var linkedme_key = linkedmeKey;
+    var initData = {};
+    initData.type = "live";
+    linkedme.init(linkedme_key, initData, function(err, response) {});
+
+    //创建深度链接  跳转到首页
+    var data = {};
+    var appJsonString = window.location.href;
+    var appJson = encodeURI(appJsonString);
+    data.params = '{"linkedme":"' + appJson + '"}'; //注意单引号和双引号的位置
+    linkedme.link(data, function(err, response) {
+        if (err) {
+            // 生成深度链接失败，返回错误对象err
+            console.log("errr" + err);
+        } else {
+            if (callback && typeof(callback) === "function") {
+                callback(response.url);
+            } else {
+                return;
+            }
+            // $("#pop_download").addClass("linkedme").attr("href", response.url);
+        }
+    }, false);
+}
+
+/**
+ *  linkedme 跳转
+ */
+export const linkedmeInnerApp = (viewId, viewProperty, callback) => {
+    var linkedme_key = linkedmeKey;
+    var initData = {};
+    initData.type = "live";
+    linkedme.init(linkedme_key, initData, function(err, response) {});
+
+    //创建深度链接  跳转到首页
+    var data = {};
+    var appJson = {
+        "view": {
+            "viewId": viewId,
+            "viewProperty": viewProperty
+        }
+    };
+    var appJsonString = encodeURI("app://") + JSON.stringify(appJson);
+    appJson = encodeURI(appJsonString);
+    data.params = '{"linkedme":"' + appJson + '"}'; //注意单引号和双引号的位置
+    linkedme.link(data, function(err, response) {
+        if (err) {
+            // 生成深度链接失败，返回错误对象err
+            console.log("errr" + err);
+        } else {
+            if (callback && typeof(callback) === "function") {
+                console.log("response.url", response.url);
+                callback(response.url);
+            } else {
+                return;
+            }
+            // $("#pop_download").addClass("linkedme").attr("href", response.url);
+        }
+    }, false);
+}
 
 /**
  * 显示返回顶部按钮，开始、结束、运动 三个过程中调用函数判断是否达到目标点

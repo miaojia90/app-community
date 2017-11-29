@@ -21,7 +21,7 @@ function appInnerOpenWebAccount() {
 		var sm = document.createElement('script');
 		sm.type = 'text/javascript';
 		sm.async = true;
-		sm.src = 'https://jfzapp-static2.jfz.com/static/js/record.origin.min.js';
+		sm.src = 'https://jfzapp-static2.jinfuzi.com/static/js/record.origin.min.js';
 		var s = document.getElementsByTagName('script')[0];
 		s.parentNode.insertBefore(sm, s);
 	})();
@@ -39,7 +39,7 @@ function appOutOpenWebAccount() {
 	var sm = document.createElement('script');
 	sm.type = 'text/javascript';
 	sm.async = true;
-	sm.src = 'https://jfzapp-static2.jfz.com/static/js/record.origin.min.js';
+	sm.src = 'https://jfzapp-static2.jinfuzi.com/static/js/record.origin.min.js';
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(sm, s);
 }

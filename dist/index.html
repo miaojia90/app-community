@@ -1,1 +1,19 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><title>my-first-vue-app</title><link href=/app/static/css/main.b19020655568d8183b72edd0ce80ea6f.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=/app/static/js/manifest-588a0cc02fe5f79e84ee.js></script><script type=text/javascript src=/app/static/js/vendor-83cf0030ef481166bedd.js></script><script type=text/javascript src=/app/static/js/main-3107aed89a213c3b75ad.js></script></body></html>
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name=format-detection content="telephone=no"><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=black><title></title><script type=text/javascript src=https://res.wx.qq.com/open/js/jweixin-1.0.0.js></script><script src=https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js></script><script src=https://static.lkme.cc/linkedme.min.js></script><script src=https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/2.5.1/vconsole.min.js></script><script>var iWidth = document.documentElement.clientWidth;
+    document.getElementsByTagName("html")[0].style.fontSize = iWidth / 10 + "px";</script><link href=/vue-app/community/static/css/main.012425cb8fd688685d4d29bcce557c62.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=/vue-app/community/static/js/manifest-0748f4387a5ce53fbd76.js></script><script type=text/javascript src=/vue-app/community/static/js/vendor-a909c121020a255681ef.js></script><script type=text/javascript src=/vue-app/community/static/js/main-021425900cb70b1333f1.js></script></body></html><script type=text/javascript>function enterDetailPageEvent(url, uid) {
+        if (!!!uid) {
+            //直接跳转到详情页
+            window.location.href = decodeURI(url);
+        } else {
+            if (/JFZFortune/i.test(navigator.userAgent)) {
+                //站内
+                WebViewJavascriptBridge.ready(function(bridge) {
+                    bridge.jumpToView('32', '0', {
+                        "uid": uid
+                    });
+                });
+            } else {
+                //站外
+                window.location.href = decodeURI(url);
+            }
+        }
+    }</script>

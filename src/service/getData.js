@@ -4,8 +4,19 @@ import {
 } from '../utils/mUtils'
 
 /**
- * 获取社区列表信息
+ * 获取板块详情信息
  */
-export const getCommunityList = (communityType) => fetch('/api/getCommunityList', {
-	communityType: communityType
+export const getBlockDetailInfo = (blockId) => fetch('/fortune/community/block-detail', {
+	blockId: blockId,
+	callback: ''
+});
+
+/**
+ * 获取帖子列表信息
+ */
+export const getArticleListInfo = (blockId, page, pageSize) => fetch('/fortune/community/article-list', {
+	blockId: blockId,
+	page: page,
+	pageSize: pageSize,
+	callback: ''
 });

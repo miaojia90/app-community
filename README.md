@@ -1,3 +1,5 @@
+## 项目技术栈
+vue + vuex + fethJson + mock + jockey
 ## 项目简介
 
 基于 vue.js 的前端开发环境，用于前后端分离后的单页应用开发，可以在开发时使用 ES Next、scss 等最新语言特性。项目包含：
@@ -54,9 +56,6 @@
 
 
 ## 快速开始
-
-    git clone https://github.com/hanan198501/vue-spa-template.git 
-    cd vue-spa-template
     cnpm install
     npm run dev
 

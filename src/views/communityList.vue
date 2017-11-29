@@ -1,18 +1,18 @@
 <template>
     <div class="communityList">
         <div class="communityHead">
-            <HeadTitle :communityListObject="communityListObject"></HeadTitle>
+            <HeadTitle :blockDetail="blockDetail"></HeadTitle>
         </div>
         <div class="community-item-list">
-            <ListTitle :listTitle="listTitle"></ListTitle>
+            <ListTitle :listTitle="titleName"></ListTitle>
             <div class="community-list-box" v-load-more="loaderMore">
-                <ListItem :itemTopic="communityListObjectComputed"></ListItem>
+                <ListItem :itemTopic="articleListObject"></ListItem>
             </div>
         </div>
         <transition name="loading">
             <loading v-show="showLoading"></loading>
         </transition>
-        <FooterComm></FooterComm>
+        <FooterComm v-show="!showLoading"></FooterComm>
         <div class="publish-comment" @click="enterCommunityComment">
         </div>
     </div>
@@ -25,61 +25,61 @@ import FooterComm from 'components/footer/footer';
 import { mapState, mapActions } from 'vuex';
 import { showBack, animate } from '../utils/mUtils';
 import { loadMore } from 'components/common/mixin';
-import loading from 'components/common/loading'
+import loading from 'components/common/loading';
 export default {
     data() {
         return {
-            communityListObject: null, //社区列表
             preventRepeat: false, //防止重复获取
-            showLoading: true, //显示加载动画
-            listTitle: '最新帖子'
+            showLoading: false, //显示加载动画
+            articlePage:1,//文章的页码
+            articlePageSize:10,//每页显示的数量
+            listTitle: '最新帖子',
+            blockId:1,
+            articleListObject:null
         }
     },
     components: { HeadTitle, ListTitle, ListItem, FooterComm, loading },
     mixins: [loadMore],
     mounted() {
         document.title = '社区';
-        this.communityType = this.$route.params.communityType;
-        this.initData(this.communityType);
+        this.blockId = this.$route.params.blockId;
+        this.articlePage=1;
+        this.articlePageSize=10;
+        console.log(this.articleList);
+        if(!this.articleList || this.articleList.length <= 0){
+           this.initData(this.blockId);
+        }else{
+            this.articleListObject =this.articleList;
+        }
     },
     computed: {
         ...mapState([
-            'communityList',
-            'communityHead'
-        ]),
-        communityListObjectComputed() {
-            if (!this.communityList) {
-                return null;
-            } else {
-                console.log("communityListObjectComputed" + this.communityList);
-                return this.communityList;
-            }
-        }
+            'blockDetail',
+            'articleList',
+            'articlePageInfo',
+            'titleName'
+        ])
     },
     methods: {
-        async initData(communityType) {
+        async initData(blockId) {
             //初始化页面数据
-            await this.getCommunityListInfo(this.communityType);
-            this.communityListObject = this.communityHead;
+            let args={"blockId":blockId,"page":this.articlePage,"pageSize":this.articlePageSize};
+            await this.getArticleList(args);
+            await this.getBlockDetail(blockId);
         },
         //加载更多
         async loaderMore() {
             if (this.preventRepeat) {
                 return
             }
-            console.log("xxx");
+            if(this.articlePageInfo.current==this.articlePageInfo.total){
+                this.showLoading=false;
+                return;
+            }
             this.preventRepeat = true;
             this.showLoading = true;
-            // this.offset += 10;
-            //获取信息
-            // let res = await getOrderList(this.userInfo.user_id, this.offset);
-            // this.orderList = [...this.orderList, ...res];
-            // this.hideLoading();
-            // if (res.length < 10) {
-            //     return
-            // }
-            await this.getCommunityListInfo(2);
-            // this.communityListObject=this.communityList;
+            let args={"blockId":this.blockId,"page":parseInt(this.articlePageInfo.current)+1,"pageSize":this.articlePageInfo.size};
+            await this.getArticleList(args);
             let that = this;
             setTimeout(function() {
                 that.preventRepeat = false;
@@ -87,39 +87,16 @@ export default {
 
         },
         enterCommunityComment() {
-            let that = this;
-            //进入到社区的评论
-            WebViewJavascriptBridge.ready(function(bridge) {
-                bridge.getSession(function(session) {
-                    var uid = session.uid;
-                    var sid = session.sid;
-                    console.log("sid" + sid);
-                    //用户没有登录跳转到登录
-                    if (!sid) {
-                        that.callLoginJockey();
-                    }
-                });
-            });
-        },
-        callLoginJockey() {
-            WebViewJavascriptBridge.ready(function(bridge) {
-                bridge.login(function(session) {
-                    var uid = session.uid;
-                    var sid = session.sid;
-                    console.log(session);
-                    if (sid == "" || sid == null) {
-                        return;
-                    } else {
-                        //跳转到投资大赛登录页
-                        window.location.reload();
-                        return;
-                    }
-                });
-            });
         },
         ...mapActions([
-            'getCommunityListInfo'
+            'getArticleList',
+            'getBlockDetail'
         ])
+    },
+    watch: {
+        articleList: function (value) {
+           this.articleListObject =  value;
+        }
     }
 }
 </script>

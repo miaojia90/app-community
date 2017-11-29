@@ -52,7 +52,7 @@ a {
 
 img {
     display: block;
-    width: 100%;
+    max-width: 100%;
 }
 
 table {
@@ -62,7 +62,13 @@ table {
 body{
     background-color: #F4F5F7;
 }
-
+.one-line-break{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
 .two-line-break{
     overflow: hidden;
     display: -webkit-box;
@@ -76,5 +82,24 @@ body{
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     word-break: break-all;
+}
+.detail-content-section {
+    .content-box {
+        .detail-link-a {
+            color: #3353DB;
+            &:link,
+            &:visited,
+            &:hover,
+            &:active {
+                color: #3353DB;
+            }
+        }
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            color: #3353DB !important;
+        }
+    }
 }
 </style>

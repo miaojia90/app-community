@@ -153,7 +153,7 @@
 				itemClickObject: {},
 				msgAfterClick: 'afterClickRightShareButton',
 				btnTitle: '',
-				btnImage: 'http://oss-cn-hangzhou.aliyuncs.com/jfzapp-static2/ad/c6fd8c5187086c271e268ab810379a83.png'
+				btnImage: 'https://oss-cn-hangzhou.aliyuncs.com/jfzapp-static2/devenv/ad/cd796d11ec931f822453cf1bef101d65.png'
 			});
 		}, 0);
 	}
@@ -288,6 +288,45 @@
 		});
 	}
 
+
+	/***
+	 *  发布评论
+	 */
+	function publishComment(code, type, replyCommentId, placeholder, callback) {
+		callback = callback || function() {};
+
+		setTimeout(function() {
+			Jockey.send("addProComment", {
+				prdCode: code,
+				prdType: type,
+				prdName: '',
+				replyCommentId: replyCommentId.toString(),
+				placeholder: placeholder
+			}, function(comment) {
+				callback(comment);
+			});
+		}, 0);
+	}
+
+	/**
+	 * 页面跳转
+	 * @param viewId
+	 * @param closeWebView
+	 * @param viewProperty
+	 */
+	function jumpToView(viewId, closeWebView, viewProperty) {
+		setTimeout(function() {
+			Jockey.send("jumpToView", {
+				view: {
+					viewId: viewId,
+					closeWebView: closeWebView,
+					viewProperty: viewProperty
+				}
+			})
+		}, 0);
+	}
+
+
 	//暴露桥接方法出去
 	window.WebViewJavascriptBridge = {
 		init: init,
@@ -300,11 +339,13 @@
 		shareToSNS: shareToSNS,
 		jumpToBuy: jumpToBuy,
 		login: login,
+		jumpToView: jumpToView,
 		getUserIdentifyInfo: getUserIdentifyInfo,
 		goIdentifyPage: goIdentifyPage,
 		riskEvaluationResult: riskEvaluationResult,
 		closeBrowser: closeBrowser,
-		closeWebView: closeWebView
+		closeWebView: closeWebView,
+		publishComment: publishComment
 	};
 	window.WebViewJavascriptBridge.init();
 })(window, Jockey);

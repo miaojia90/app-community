@@ -12,6 +12,7 @@ $r_750:640/750/2/32;
 footer{
 	&.footer-container{
 		padding: rem(30);
+		padding-bottom: rem(80);
        .content-text{
        	font-size: rem(12);
        	color:#C8CCD4;

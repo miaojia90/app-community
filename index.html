@@ -7,8 +7,10 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>社区</title>
+    <title></title>
     <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://static.lkme.cc/linkedme.min.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/2.5.1/vconsole.min.js"></script>
     <script>
     var iWidth = document.documentElement.clientWidth;
@@ -22,3 +24,23 @@
 </body>
 
 </html>
+<script type="text/javascript">
+    function enterDetailPageEvent(url, uid) {
+        if (!!!uid) {
+            //直接跳转到详情页
+            window.location.href = decodeURI(url);
+        } else {
+            if (/JFZFortune/i.test(navigator.userAgent)) {
+                //站内
+                WebViewJavascriptBridge.ready(function(bridge) {
+                    bridge.jumpToView('32', '0', {
+                        "uid": uid
+                    });
+                });
+            } else {
+                //站外
+                window.location.href = decodeURI(url);
+            }
+        }
+    }
+</script>

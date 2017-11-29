@@ -7,8 +7,6 @@ import VueRouter from 'vue-router';
 import App from './app';
 import routes from './routes';
 import store from './vuex/index';
-import './utils/jockey.js';
-import './utils/jsBridge.js';
 import './utils/webcount.js';
 
 Vue.use(Vuex);

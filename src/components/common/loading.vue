@@ -28,10 +28,15 @@ $r_750:640/750/2/32;
 .loading_container {
     color: #C8CCD4;
     text-align: center;
-    font-size: rem(12);
-    vertical-align:middle;
-    height:rem(30);
-    line-height: rem(30);
+    font-size: rem(14);
+    height:rem(50);
+    line-height: rem(50);
+    padding-bottom: rem(50);
+    .loading{
+      display:flex;
+      align-items:center;/*垂直居中*/
+      justify-content: center;/*水平居中*/      
+    }
     .loading:before {
         content: '';
         display: inline-block;
@@ -40,14 +45,9 @@ $r_750:640/750/2/32;
         margin-right: rem(5);
         background-image: url(../../assets/images/loading.png);
         background-size:100% 100%;
-        vertical-align:middle;
         animation: .5s rotate360 linear infinite;
         -webkit-animation: .5s rotate360 linear infinite;
         -o-animation: .5s rotate360 linear infinite;
-    }
-    span{
-        display:inline-block;
-         vertical-align:middle;
     }
 }
 

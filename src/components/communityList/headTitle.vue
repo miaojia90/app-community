@@ -2,17 +2,17 @@
     <section :class="sectionClass">
         <p class="title">
             <span class="title-span">
-	   {{ communityListObject?communityListObject.headTitle:''}}
+	   {{ blockDetail?blockDetail.name:''}}
 	   </span>
         </p>
         <p class="desc">
             <span class="desc-span">
-	   {{ communityListObject?communityListObject.headDesc:'' }}
+	   {{ blockDetail?blockDetail.introduce:'' }}
 	   </span>
         </p>
         <div class="bottom-count-box">
-            <span>{{communityListObject?communityListObject.countTopic:'' }}帖子</span>
-            <span>{{communityListObject?communityListObject.countComment:'' }}讨论</span>
+            <span>{{blockDetail?blockDetail.articleNum:'' }}帖子</span>
+            <span>{{blockDetail?blockDetail.discussNum:'' }}讨论</span>
         </div>
     </section>
 </template>
@@ -22,14 +22,14 @@ export default {
        return {
        }
     },
-    props: ['communityListObject'],
+    props: ['blockDetail'],
     mounted: function() {
     },
     computed:{
         sectionClass(){
            let sectionClass='head-container';
-           if(this.communityListObject){
-              sectionClass='head-container head-bg-'+this.communityListObject.type
+           if(this.blockDetail){
+              sectionClass='head-container head-bg-'+this.blockDetail.id
            }
            return  sectionClass;
         }

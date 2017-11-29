@@ -20,7 +20,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/app/',
+    assetsPublicPath: '/vue-app/community/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all staticø assets for you.
@@ -31,7 +31,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8090,
+    port: 9999,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
